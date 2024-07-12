@@ -1,18 +1,25 @@
 # speml_2
 Security, Privacy and Explainability in Machine Learning Project 2
 
-## Conspect
+## Concept
 https://www.overleaf.com/project/667698126de13b05d1732edb
-
-## CelebDataProcessed:
-https://www.kaggle.com/datasets/kaustubhchaudhari/pubfig-dataset-256x256-jpg
-Only ~11 600 faces, preprocessed 256*256pixels, 150 people
 
 ## CIFAR - 10 database
 https://www.cs.toronto.edu/~kriz/cifar.html
 10 classes, 6000 img/class
 
 ## How to run project?
+Install ffmpeg V4.4 (dependency of syft 0.2.9):
+
+```
+wget https://ffmpeg.org/releases/ffmpeg-4.4.tar.bz2
+tar xjf ffmpeg-4.4.tar.bz2
+cd ffmpeg-4.4
+./configure --prefix=/usr/local --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-avresample --enable-libvorbis --enable-gpl --disable-x86asm
+make
+sudo make install
+```
+
 1. create conda environment with:
 conda env create -f environment.yml
 
