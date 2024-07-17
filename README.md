@@ -26,3 +26,10 @@ conda env create -f environment.yml
 for updating environment run:
 conda env update -f environment.yml
 
+
+TO-DO:
+1. monitoring of training process: wandb library for graphs
+2. traditional model training
+3. comparison of results for 2,3,5 workers
+4. comparison between traditional and federated approach
+5. report 
