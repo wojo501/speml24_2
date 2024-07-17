@@ -29,7 +29,5 @@ conda env update -f environment.yml
 
 TO-DO:
 1. monitoring of training process: wandb library for graphs
-2. traditional model training
-3. comparison of results for 2,3,5 workers
-4. comparison between traditional and federated approach
-5. report 
+2. comparison between traditional and federated approach
+3. report 
