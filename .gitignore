@@ -2,3 +2,4 @@ data/*
 ffmpeg-4.4/*
 .env
 SPEML_SS2024_Exercise2_description.pdf
+code/wandb
