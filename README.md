@@ -21,13 +21,14 @@ sudo make install
 ```
 
 1. create conda environment with:
-conda env create -f environment.yml
+```conda env create -f environment.yml```
 
 for updating environment run:
-conda env update -f environment.yml
+```conda env update -f environment.yml```
 
+if this is not working use command:
+```conda create --name speml24_2 --file packages.txt```
 
 TO-DO:
-1. monitoring of training process: wandb library for graphs
-2. comparison between traditional and federated approach
-3. report 
+1. comparison between traditional and federated approach
+2. report 
