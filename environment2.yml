@@ -1,0 +1,17 @@
+name: speml24_2
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pandas
+  - numpy=1.18.5
+  - matplotlib
+  - pip
+  - wandb
+  - protobuf<3.21
+  - python-dotenv
+  - pip:
+    - syft==0.2.9
+    - torchvision==0.5.0
+    - ipykernel==5.5.6
