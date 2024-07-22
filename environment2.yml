@@ -1,0 +1,14 @@
+name: myenv
+channels:
+- pytorch
+- conda-forge
+- defaults
+dependencies:
+- python=3.11 # Specify the Python version you want to use
+- pytorch
+- torchvision
+- cudatoolkit
+- pip
+- ipykernel
+- pip:
+  - syft
