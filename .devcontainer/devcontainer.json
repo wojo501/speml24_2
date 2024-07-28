@@ -9,10 +9,7 @@
 		"dockerfile": "Dockerfile"
 	},
 
-	"runArgs": [
-	"-v", "/tmp/.X11-unix:/tmp/.X11-unix",  // Mount X11 socket
-	"-e", "DISPLAY"  // Use host DISPLAY environment variable
-	],
+	"runArgs": ["--memory=16g"],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {

@@ -13,9 +13,8 @@ https://www.cs.toronto.edu/~kriz/cifar.html
 10 classes, 6000 img/class
 
 ## How to run project?
-1. create conda environment with:
-conda env create -f environment.yml
-
-for updating environment run:
-conda env update -f environment.yml
-
+```
+python3.11 -m venv venv
+source venv/bin/activate
+pip install numpy ipykernel tensorflow-federated matplotlib
+```
