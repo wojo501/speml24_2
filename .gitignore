@@ -1,6 +1,6 @@
 data/*
 SPEML_SS2024_Exercise2_description.pdf
-venv2/*
+.venv/*
 venv/*
 myenv/*
 .env
