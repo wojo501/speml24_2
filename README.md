@@ -20,6 +20,10 @@ Usage of Tensorflow Federated Learning Library (https://www.tensorflow.org/feder
 6. Dense Layer: 500 neurons, ReLU activation.
 7. Dense Layer: 10 neurons, Softmax activation for classification.
 
+### Alternative Architecture
+
+We tried alternative frameworks (pysyft) which can be found under alternative_architectures with their own README
+
 ## Experiments
 - Comparing Federated Learning to Centralised Learning
     - With different Optimizers
