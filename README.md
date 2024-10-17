@@ -1,11 +1,11 @@
 # SPEML 2024 Group 16
 Security, Privacy and Explainability in Machine Learning at Vienna University of Technology. Project 2.
 
-## Authors:
+## Authors
 [Wojciech Michaluk](https://github.com/wojo501) \
 [Stephan Klein](https://github.com/stephan-klein) 
 
-## [Overview]()
+## [Overview](https://github.com/wojo501/speml24_2/blob/main/final_report.pdf)
 Goal of the project is to compare centralised and federated learning for image classification. We used Pytorch and Tensorflow.
 
 ## Dataset
