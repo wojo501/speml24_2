@@ -1,11 +1,11 @@
 # SPEML 2024 Group 16
 Security, Privacy and Explainability in Machine Learning at Vienna University of Technology. \
 Federated Learning for Image Data with Pytorch and Tensorflow. \
-[Weight and Biases](https://wandb.ai) tool for visualization. \
+[Weight and Biases](https://wandb.ai) tool for visualization. 
 
 ## Authors:
 [Wojciech Michaluk](https://github.com/wojo501) \
-[Stephan Klein](https://github.com/stephan-klein) \
+[Stephan Klein](https://github.com/stephan-klein) 
 
 ## [Detailed description]()
 Federated Learning for Image Data. The objective is to evaluate
