@@ -1,5 +1,24 @@
 # SPEML 2024 Group 16
-Security, Privacy and Explainability in Machine Learning Project 2
+Security, Privacy and Explainability in Machine Learning at Vienna University of Technology. 
+Federated Learning for Image Data with Pytorch and Tensorflow. 
+[Weight and Biases](https://wandb.ai) tool for visualization.
+
+## Authors:
+[Wojciech Michaluk](https://github.com/wojo501)
+[Stephan Klein](https://github.com/stephan-klein)
+
+## [Detailed description]()
+Federated Learning for Image Data. The objective is to evaluate
+the predictive effectiveness (e.g., accuracy) of federated learning compared to centralized learning.
+Federated learning aims to train a central model from data that remains distributed across multiple
+nodes. This approach ensures data privacy and security by keeping the data local while sharing only
+model updates.
+In this project, we explore the application of federated learning using the PySyft and TensorFlow
+Federated libraries by training a CNN model on CIFAR10 and compare its effectiveness and
+efficiency against centralized learning.
+Our report contains a summary of the architecture, the conducted experiments and their results.
+For details about the implementation please consult the attached code package, which provides a
+set of documented Jupyter Notebooks with additional information.
 
 ## Dataset
 CIFAR10
