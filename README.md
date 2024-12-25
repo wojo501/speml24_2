@@ -1,5 +1,5 @@
-# SPEML 2024 Group 16
-Security, Privacy and Explainability in Machine Learning at Vienna University of Technology. Project 2.
+# Security, Privacy and Explainability in Machine Learning at Vienna University of Technology. Project 2.
+SPEML 2024 Group 16
 
 ## Authors
 [Wojciech Michaluk](https://github.com/wojo501) \
