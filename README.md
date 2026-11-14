@@ -1,78 +1,247 @@
-# Security, Privacy and Explainability in Machine Learning at Vienna University of Technology
+<div align="center">
 
-## Authors
-[Wojciech Michaluk](https://github.com/wojo501) \
-[Stephan Klein](https://github.com/stephan-klein) 
+# 🌐 Federated vs. Centralized Learning on CIFAR-10
 
-## [Overview & Results](https://github.com/wojo501/speml24_2/blob/main/final_report.pdf)
-Goal of the project is to compare centralised and federated learning for image classification. We used Pytorch and Tensorflow.
+### Security, Privacy and Explainability in Machine Learning · Assignment 2
 
-## Dataset
-CIFAR10
-https://www.cs.toronto.edu/~kriz/cifar.html
-10 classes, 6000 img/class
+*TU Wien · Summer Semester 2024 · Group 16*
 
-## Architecture
-Usage of Tensorflow Federated Learning Library (https://www.tensorflow.org/federated) with a simple CNN architecture:
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![TensorFlow Federated](https://img.shields.io/badge/TensorFlow-Federated-FF6F00?logo=tensorflow&logoColor=white)](https://www.tensorflow.org/federated)
+[![PyTorch](https://img.shields.io/badge/PyTorch-PySyft-EE4C2C?logo=pytorch&logoColor=white)](alternative_architectures)
+[![Jupyter](https://img.shields.io/badge/Jupyter-Notebooks-F37626?logo=jupyter&logoColor=white)](code)
+[![W&B](https://img.shields.io/badge/Weights%20%26%20Biases-optional-FFBE00?logo=weightsandbiases&logoColor=black)](https://wandb.ai/)
+[![Report](https://img.shields.io/badge/📄%20Report-PDF-B31B1B)](final_report.pdf)
 
-1. Conv2D Layer: 20 filters of size 5x5, ReLU activation, input shape (32, 32, 3).
-2. MaxPooling2D Layer: Pooling size 2x2.
-3. Conv2D Layer: 50 filters of size 5x5, ReLU activation.
-4. MaxPooling2D Layer: Pooling size 2x2.
-5. Flatten Layer: Converts the 2D feature maps to 1D feature vectors.
-6. Dense Layer: 500 neurons, ReLU activation.
-7. Dense Layer: 10 neurons, Softmax activation for classification.
+**Centralized: 69% accuracy (epoch 3) · Federated: 65% accuracy (10 rounds)**
 
-### Alternative Architecture
+[Overview](#-overview) •
+[Model](#-cnn-model) •
+[Architectures](#%EF%B8%8F-architectures) •
+[Results](#-results) •
+[Conclusions](#-conclusions) •
+[Setup](#-setup) •
+[Authors](#-authors)
 
-We tried alternative frameworks (pysyft) which can be found under alternative_architectures with their own README
+<br/>
 
-## Experiments
-- Comparing Federated Learning to Centralised Learning
-    - With different Optimizers
-    - With different Hyperparameters (Federated Batch Size and Nr of Federated Clients)
-- Differential Privacy (https://www.tensorflow.org/federated/tutorials/federated_learning_with_differential_privacy)
-- Model and Update Compression (https://www.tensorflow.org/federated/tutorials/tff_for_federated_learning_research_compression)
+<img src="assets/federated_vs_centralized.png" alt="Federated Learning vs Centralized Learning" width="85%"/>
 
-## How to run project?
-Requirements: Python 3.11
+</div>
 
-1. **Prepare Virtual Environment**
+---
 
-    ```
-    python3.11 -m venv .venv
-    source .venv/bin/activate
-    pip install -r requirements.txt
-    ```
+## 🎯 Overview
 
-2. **Run the Notebooks**
+We compare the predictive effectiveness of **federated learning** with **centralized learning** for image classification on **CIFAR-10**.
 
-    With your favourite IDE or jupyter.
+Federated learning trains one central model from data that stays distributed across many nodes. Only model updates are shared, never the raw data, which helps keep the data private and secure.
 
-   - [Centralized Learning CIFAR-10 Notebook](./code/centralised_cifar10.ipynb)
-   - [Federated Learning CIFAR-10 Notebook](./code/federated_cifar10.ipynb)
+```mermaid
+flowchart TB
+    S[🖥️ Server<br/>global model · server optimizer]
+    S -- global weights --> C1[📱 Client 1<br/>local data]
+    S -- global weights --> C2[📱 Client 2<br/>local data]
+    S -- global weights --> C3[📱 Client N<br/>local data]
+    C1 -- model update --> A[⚖️ Federated averaging]
+    C2 -- model update --> A
+    C3 -- model update --> A
+    A --> S
+```
 
-3. **Options**
+**Experiments**
 
-    All Notebooks provide Hyperparameters in the second cell which can be changed to reproduce the experiments.
-    
-    Settings for Additional Experiments are marked in commented out code with the comment "EXPERIMENT"
+| # | Experiment | What we vary |
+|:--:|:--|:--|
+| 1 | Client & server optimizers | SGD / Adam combinations on both sides |
+| 2 | Federated hyperparameters | Batch size and number of clients |
+| 3 | Differential privacy | Noise level: 0, 0.1, 0.5 |
+| 4 | Model & update compression | With vs. without compression |
+| 5 | Federated vs. centralized | Best setup of each |
 
-4. **Reporting**
+---
 
-    All Notebooks provide logging to WANDB (https://wandb.ai/) which is turned off by default
+## 🧠 CNN Model
 
-## Troubleshooting
-### Vscode
-If using vscode it might throw the error on executing a cell: ``The file '.venv/lib/python3.11/site-packages/typing_extensions.py' seems to be overriding built in modules and interfering with the startup of the kernel. Consider renaming the file and starting the kernel again.
-Click here for more info.``
+A small but efficient CNN. It converges quickly on limited hardware without a GPU, so we could run many experiments in a reasonable time.
 
-Instead of renaming,``pip install -U typing-extensions`` also suffices
+```mermaid
+flowchart LR
+    I[🖼️ Input<br/>32×32×3] --> C1[Conv2D<br/>20 × 5×5 · ReLU]
+    C1 --> P1[MaxPool<br/>2×2]
+    P1 --> C2[Conv2D<br/>50 × 5×5 · ReLU]
+    C2 --> P2[MaxPool<br/>2×2]
+    P2 --> F[Flatten]
+    F --> D1[Dense 500<br/>ReLU]
+    D1 --> D2[Dense 10<br/>Softmax]
+```
 
-### Tensorflow
-Tensorflow Federated has a Serialisation Limit of 100 MB by default.
-If data to federated client is increased (e.g by reducing nr of workers below 10) the error `ValueError: Serialized size of Dataset (537613688 bytes) exceeds maximum allowed` might be thrown.
+---
 
-This can be fixed by changing the limit in file \<pythonenv\>/lib/python3.11/site-packages/tensorflow_federated/python/core/impl/executors/value_serialization.py
+## 🏗️ Architectures
 
-See: https://stackoverflow.com/questions/76407619/tensorflow-federated-increase-default-serialization-limit-bytes
+| Architecture | Status | Notes |
+|:--|:--:|:--|
+| **PySyft 0.2.9** (PyTorch 1.4.0) | ✅ Works | Virtual Workers on a single host. Likely no privacy techniques such as differential privacy. |
+| **PySyft 0.8** | ❌ Failed | Federated learning is no longer supported out of the box. Examples only cover two parties. |
+| **TensorFlow Federated** | ⭐ Final | Good documentation, differential privacy, and model & update compression. |
+
+The PySyft experiments are in [`alternative_architectures/`](alternative_architectures), which has its own README.
+
+**How the TFF pipeline works**
+
+1. Load CIFAR-10 with `tf.keras.datasets`, normalize the pixel values and one-hot encode the labels.
+2. Split the data into a federated dataset (tensor slices by number of clients and batch size).
+3. Build the algorithm with `build_weighted_fed_avg` / `build_unweighted_fed_avg`, choosing client and server optimizers.
+4. Run rounds with `IterativeProcess.next`.
+5. After each round, copy the weights into a centralized clone of the model and evaluate it on the holdout test set. This makes the comparison with centralized learning fair.
+
+---
+
+## 📊 Results
+
+> All TFF results are validation accuracy on a holdout test set, measured after each round of federated learning.
+
+### PySyft 0.2.9: number of workers
+
+<p align="center">
+  <img src="assets/pysyft_accuracy_workers.png" alt="Accuracy by number of workers" width="48%"/>
+  &nbsp;
+  <img src="assets/pysyft_train_loss.png" alt="Train loss by number of workers" width="48%"/>
+</p>
+
+The CNN learns at the same pace whatever the number of workers, and accuracy doesn't change. With no privacy techniques and equally split data, this doesn't reflect real conditions.
+
+### TFF: optimizers
+
+<div align="center">
+<img src="assets/tff_optimizers.png" alt="Federated Learning accuracy by optimizers" width="75%"/>
+</div>
+
+**SGD on the server + Adam on the clients** gave the best accuracy, so we used it as the baseline for the other experiments.
+
+### TFF: batch size and number of clients
+
+<p align="center">
+  <img src="assets/tff_batch_size.png" alt="Accuracy by batch size" width="48%"/>
+  &nbsp;
+  <img src="assets/tff_num_clients.png" alt="Accuracy by number of clients" width="48%"/>
+</p>
+
+- **Batch size:** 15–30 worked best. Above 50, results got worse.
+- **Clients:** with more clients, accuracy grows more slowly. **5 clients** gave the best final result.
+
+### TFF: compression and differential privacy
+
+<p align="center">
+  <img src="assets/tff_compression.png" alt="Effect of model and update compression" width="48%"/>
+  &nbsp;
+  <img src="assets/tff_differential_privacy.png" alt="Differential privacy vs accuracy" width="48%"/>
+</p>
+
+- **Compression** slows the early rounds, but both models converge to a similar accuracy after 20 rounds.
+- **Differential privacy** trades accuracy for privacy. Noise of 0.1 lowered accuracy from **45% to 38%**, and at 0.5 the model barely learns.
+
+### Federated vs. centralized
+
+<div align="center">
+
+| Setup | Best accuracy | Reached after |
+|:--|:--:|:--:|
+| Centralized learning | **69%** | 3 epochs |
+| Federated learning | **65%** | 10 rounds |
+
+<img src="assets/overfitting_fl_vs_cl.png" alt="Overfitting: centralized vs federated" width="75%"/>
+<br/><sub><i>Training (solid) vs. validation (dashed) accuracy. Centralized learning overfits much sooner than federated learning.</i></sub>
+
+</div>
+
+---
+
+## 💡 Conclusions
+
+- Federated learning reaches **slightly lower accuracy** than centralized learning and **needs more training rounds**.
+- In return it **keeps data private** and can learn from much larger, distributed datasets.
+- Tuning **both client and server optimizers** helps the model converge faster.
+- More clients means more rounds are needed, because the data is spread across clients.
+- Differential privacy is a clear **privacy–accuracy trade-off**: more noise means lower accuracy.
+- TensorFlow Federated was by far the most usable library. PySyft's federated support is limited until version 0.9.
+
+📄 The full analysis is in the [**final report**](final_report.pdf).
+
+---
+
+## 🚀 Setup
+
+**Requirements:** Python 3.11
+
+```bash
+git clone https://github.com/wojo501/speml24_2.git
+cd speml24_2
+
+python3.11 -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+
+pip install -r requirements.txt
+```
+
+Then open the **centralized** or **federated** CIFAR-10 notebook in [`code/`](code) and run it.
+
+- **Hyperparameters** are in the second cell of each notebook.
+- **Other experiment settings** are marked with `EXPERIMENT` comments in the code.
+- **Weights & Biases** logging is available but turned off by default.
+
+<details>
+<summary><b>🛠️ Troubleshooting (click to expand)</b></summary>
+
+<br/>
+
+- **VS Code kernel error caused by `typing_extensions`:** upgrade the package:
+  ```bash
+  pip install --upgrade typing_extensions
+  ```
+- **Serialization error with large client datasets:** TensorFlow Federated has a default serialization limit of 100 MB. Raise it in the TFF library source if your client datasets are larger.
+
+</details>
+
+---
+
+## 📁 Project Structure
+
+```
+speml24_2/
+├── alternative_architectures/   # PySyft experiments (own README)
+├── assets/                      # Images used in this README
+├── code/                        # Centralized & federated CIFAR-10 notebooks (TFF)
+├── final_report.pdf             # Full project report
+└── requirements.txt
+```
+
+---
+
+## 👥 Authors
+
+<div align="center">
+
+<table>
+<tr>
+<td align="center">
+<a href="https://github.com/wojo501"><img src="https://github.com/wojo501.png" width="100px" alt="Wojciech Michaluk"/><br/><sub><b>Wojciech Michaluk</b></sub></a>
+</td>
+<td align="center">
+<sub><b>Stephan Klein</b></sub>
+</td>
+</tr>
+</table>
+
+<sub>TU Wien · Security, Privacy and Explainability in Machine Learning · SS 2024</sub>
+
+</div>
+
+---
+
+## 📚 References
+
+1. [Federated Learning example with syft version 0.7 · Issue #7384 · OpenMined/PySyft](https://github.com/OpenMined/PySyft/issues/7384)
+2. Krizhevsky, A., Nair, V., Hinton, G.: [CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html)
+3. ur Rehman, M.H., Gaber, M.M. (eds.): *Federated Learning Systems: Towards Next-Generation AI*. Springer, 2021. [doi:10.1007/978-3-030-70604-3](https://doi.org/10.1007/978-3-030-70604-3)
